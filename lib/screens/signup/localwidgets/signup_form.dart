@@ -2,7 +2,7 @@ import 'package:book_dub/screens/signup/signup.dart';
 import 'package:book_dub/widgets/our_container.dart';
 import 'package:flutter/material.dart';
 
-class OurLoginForm extends StatelessWidget {
+class OurSignupForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OurContainer(
@@ -14,13 +14,23 @@ class OurLoginForm extends StatelessWidget {
               horizontal: 8.0,
             ),
             child: Text(
-              "Log In",
+              "Sign Up",
               style: TextStyle(
                 color: Theme.of(context).secondaryHeaderColor,
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
+          ),
+          TextFormField(
+            // controller: _emailController,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.person_outline),
+              hintText: "Full Name",
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
           ),
           TextFormField(
             // controller: _emailController,
@@ -43,11 +53,22 @@ class OurLoginForm extends StatelessWidget {
           SizedBox(
             height: 20.0,
           ),
+          TextFormField(
+            // controller: _passwordController,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.lock_open),
+              hintText: "Password",
+            ),
+            obscureText: true,
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
           RaisedButton(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 100),
               child: Text(
-                "Log In",
+                "Sign Up",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,
@@ -56,18 +77,7 @@ class OurLoginForm extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              print("Login pressed");
-            },
-          ),
-          FlatButton(
-            child: Text("Don't have an account? Sign up here"),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => OurSignup(),
-                ),
-              );
+              print("Signup pressed");
             },
           ),
         ],

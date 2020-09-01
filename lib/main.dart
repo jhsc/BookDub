@@ -1,8 +1,13 @@
 import 'package:book_dub/screens/login/login.dart';
+import 'package:book_dub/states/currentUser.dart';
 import 'package:book_dub/utils/our_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -10,10 +15,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: OurTheme().buildTheme(),
-      debugShowCheckedModeBanner: false,
-      home: OurLogin(),
+    return ChangeNotifierProvider(
+      create: (context) => CurrentUser(),
+      child: MaterialApp(
+        theme: OurTheme().buildTheme(),
+        debugShowCheckedModeBanner: false,
+        home: OurLogin(),
+      ),
     );
   }
 }

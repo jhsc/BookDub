@@ -27,6 +27,7 @@ dependencies:
   # Added packages
   firebase_auth: ^0.18.0+1
   provider: ^3.1.0
+  firebase_core: ^0.5.0
 
 dev_dependencies:
   flutter_test:

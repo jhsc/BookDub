@@ -14,11 +14,12 @@ class _OurSignupFormState extends State<OurSignupForm> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
-  void _signUpUser(BuildContext context, String email, password) async {
+  void _signUpUser(
+      BuildContext context, String email, password, fullName) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
 
     try {
-      String _ret = await _currentUser.signUpUser(email, password);
+      String _ret = await _currentUser.signUpUser(email, password, fullName);
       if (_ret == "success") {
         Navigator.pop(context);
       } else {
@@ -110,7 +111,11 @@ class _OurSignupFormState extends State<OurSignupForm> {
             onPressed: () {
               if (_passwordController.text == _confirmPasswordController.text) {
                 _signUpUser(
-                    context, _emailController.text, _passwordController.text);
+                  context,
+                  _emailController.text,
+                  _passwordController.text,
+                  _nameController.text,
+                );
               } else {
                 Scaffold.of(context).showSnackBar(
                   SnackBar(

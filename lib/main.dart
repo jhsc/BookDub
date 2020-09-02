@@ -1,4 +1,4 @@
-import 'package:book_dub/screens/login/login.dart';
+import 'package:book_dub/screens/root/root.dart';
 import 'package:book_dub/states/currentUser.dart';
 import 'package:book_dub/utils/our_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: OurTheme().buildTheme(),
         debugShowCheckedModeBanner: false,
-        home: OurLogin(),
+        home: OurRoot(),
       ),
     );
   }

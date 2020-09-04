@@ -30,6 +30,52 @@ class OurDatabase {
       retVal.fullName = _docSnapshot.data()["fullName"];
       retVal.email = _docSnapshot.data()["email"];
       retVal.accountCreated = _docSnapshot.data()["accountCreated"];
+      retVal.groupId = _docSnapshot.data()["groupId"];
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> createGroup(String groupName, userUid) async {
+    String retVal = "error";
+    List<String> members = List();
+
+    try {
+      members.add(userUid);
+      DocumentReference _docRef = await _firestore.collection("groups").add({
+        'name': groupName,
+        'leader': userUid,
+        'members': members,
+        'groupCreated': Timestamp.now(),
+      });
+
+      await _firestore.collection("users").doc(userUid).update({
+        'groupId': _docRef.id,
+      });
+
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> joinGroup(String groupId, userUid) async {
+    String retVal = "error";
+    List<String> members = List();
+
+    try {
+      members.add(userUid);
+      await _firestore.collection("groups").doc(groupId).update({
+        'members': FieldValue.arrayUnion(members),
+      });
+
+      await _firestore.collection("users").doc(userUid).update({
+        'groupId': groupId,
+      });
+
+      retVal = "success";
     } catch (e) {
       print(e);
     }

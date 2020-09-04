@@ -1,3 +1,5 @@
+import 'package:book_dub/screens/create_group/create_group.dart';
+import 'package:book_dub/screens/join_group/join_group.dart';
 import 'package:flutter/material.dart';
 
 class OurNoGroup extends StatelessWidget {
@@ -5,8 +7,24 @@ class OurNoGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _goToJoin() {}
-    void _goToCreate() {}
+    void _goToJoin(BuildContext context) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OurJoinGroup(),
+        ),
+      );
+    }
+
+    void _goToCreate(BuildContext context) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OurCreateGroup(),
+        ),
+      );
+    }
+
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -43,7 +61,7 @@ class OurNoGroup extends StatelessWidget {
               children: <Widget>[
                 RaisedButton(
                   child: Text("Create"),
-                  onPressed: () => _goToCreate(),
+                  onPressed: () => _goToCreate(context),
                   color: Theme.of(context).canvasColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
@@ -60,7 +78,7 @@ class OurNoGroup extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  onPressed: () => _goToJoin(),
+                  onPressed: () => _goToJoin(context),
                 ),
               ],
             ),

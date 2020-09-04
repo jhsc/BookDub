@@ -1,3 +1,4 @@
+import 'package:book_dub/screens/no_group/no_group.dart';
 import 'package:book_dub/screens/root/root.dart';
 import 'package:book_dub/states/currentUser.dart';
 import 'package:book_dub/widgets/our_container.dart';
@@ -6,6 +7,15 @@ import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key key}) : super(key: key);
+
+  void _goToNoGroup(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OurNoGroup(),
+      ),
+    );
+  }
 
   void _signOut(BuildContext context) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
@@ -115,7 +125,7 @@ class HomeScreen extends StatelessWidget {
               "Book Club History",
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () {},
+            onPressed: () => _goToNoGroup(context),
           ),
         ),
         Padding(

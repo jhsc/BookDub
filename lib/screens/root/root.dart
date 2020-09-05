@@ -2,6 +2,7 @@ import 'package:book_dub/screens/home/home.dart';
 import 'package:book_dub/screens/login/login.dart';
 import 'package:book_dub/screens/no_group/no_group.dart';
 import 'package:book_dub/screens/splash_screen/splash.dart';
+import 'package:book_dub/states/currentGroup.dart';
 import 'package:book_dub/states/currentUser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +63,8 @@ class _OurRootState extends State<OurRoot> {
         retVal = OurNoGroup();
         break;
       case AuthStatus.inGroup:
-        retVal = HomeScreen();
+        retVal = ChangeNotifierProvider(
+            create: (context) => CurrentGroup(), child: HomeScreen());
         break;
       default:
     }

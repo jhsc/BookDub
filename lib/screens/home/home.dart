@@ -1,12 +1,27 @@
 import 'package:book_dub/screens/no_group/no_group.dart';
 import 'package:book_dub/screens/root/root.dart';
+import 'package:book_dub/states/currentGroup.dart';
 import 'package:book_dub/states/currentUser.dart';
 import 'package:book_dub/widgets/our_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+    CurrentGroup _currentGroup =
+        Provider.of<CurrentGroup>(context, listen: false);
+    _currentGroup.updateStateFromDatabase(_currentUser.getCurrentUser.groupId);
+  }
 
   void _goToNoGroup(BuildContext context) {
     Navigator.push(
@@ -41,48 +56,61 @@ class HomeScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: OurContainer(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Harry Putter and the Sorcer's Stone",
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20.0,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Due in:",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.grey[600],
-                        ),
+            child: Consumer<CurrentGroup>(
+              builder: (BuildContext context, value, Widget child) {
+                String dueDate = "loading..";
+                if (value.getCurrentGroup.currentBookDue != null) {
+                  dueDate = value.getCurrentGroup.currentBookDue
+                      .toDate()
+                      .toLocal()
+                      .toString();
+                }
+                return Column(
+                  children: <Widget>[
+                    Text(
+                      value.getCurrentBook.name ?? "loading..",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.grey[600],
                       ),
-                      Text(
-                        "8 Days:",
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                RaisedButton(
-                  child: Text(
-                    "Finished Book",
-                    style: TextStyle(
-                      color: Colors.white,
                     ),
-                  ),
-                  onPressed: () {},
-                ),
-              ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20.0,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            "Due in:",
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              dueDate,
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RaisedButton(
+                      child: Text(
+                        "Finished Book",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),

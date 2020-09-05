@@ -1,9 +1,6 @@
-import 'package:book_dub/screens/root/root.dart';
-import 'package:book_dub/services/database.dart';
-import 'package:book_dub/states/currentUser.dart';
+import 'package:book_dub/screens/add_book/add_book.dart';
 import 'package:book_dub/widgets/our_container.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class OurCreateGroup extends StatefulWidget {
   OurCreateGroup({Key key}) : super(key: key);
@@ -15,19 +12,16 @@ class OurCreateGroup extends StatefulWidget {
 class _OurCreateGroupState extends State<OurCreateGroup> {
   TextEditingController _groupNameController = TextEditingController();
 
-  void _createGroup(BuildContext context, String groupName) async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-    String _returnString = await OurDatabase()
-        .createGroup(groupName, _currentUser.getCurrentUser.uid);
-
-    if (_returnString == "success") {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OurRoot(),
-          ),
-          (route) => false);
-    }
+  void _goToAddBook(BuildContext context, String groupName) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OurAddBook(
+          onGroupCreation: true,
+          groupName: groupName,
+        ),
+      ),
+    );
   }
 
   @override
@@ -61,7 +55,7 @@ class _OurCreateGroupState extends State<OurCreateGroup> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 100),
                       child: Text(
-                        "Create",
+                        "Add Book",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -70,7 +64,7 @@ class _OurCreateGroupState extends State<OurCreateGroup> {
                       ),
                     ),
                     onPressed: () =>
-                        _createGroup(context, _groupNameController.text),
+                        _goToAddBook(context, _groupNameController.text),
                   ),
                 ],
               ),

@@ -40,7 +40,7 @@ class OurDatabase {
     return retVal;
   }
 
-  Future<String> createGroup(String groupName, userUid) async {
+  Future<String> createGroup(String groupName, userUid, initialBook) async {
     String retVal = "error";
     List<String> members = List();
 
@@ -56,6 +56,9 @@ class OurDatabase {
       await _firestore.collection("users").doc(userUid).update({
         'groupId': _docRef.id,
       });
+
+      // Add a book
+      addBook(_docRef.id, initialBook);
 
       retVal = "success";
     } catch (e) {
@@ -101,6 +104,34 @@ class OurDatabase {
       retVal.groupCreated = _docSnapshot.data()["groupCreated"];
       retVal.currentBookId = _docSnapshot.data()["currentBookId"];
       retVal.currentBookDue = _docSnapshot.data()["currentBookDue"];
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> addBook(String groupId, OurBook book) async {
+    String retVal = "error";
+
+    try {
+      DocumentReference _docRef = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .add({
+        'name': book.name,
+        'author': book.author,
+        'length': book.length,
+        'dateCompleted': book.dateCompleted,
+      });
+
+      //add current book to group schedule
+      await _firestore.collection("groups").doc(groupId).update({
+        "currentBookId": _docRef.id,
+        "currentBookDue": book.dateCompleted,
+      });
+
+      retVal = "success";
     } catch (e) {
       print(e);
     }

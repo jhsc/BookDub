@@ -37,11 +37,17 @@ class _OurAddBookState extends State<OurAddBook> {
     }
   }
 
-  void _createGroup(
-      BuildContext context, String groupName, OurBook book) async {
+  void _addBook(BuildContext context, String groupName, OurBook book) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-    String _returnString = await OurDatabase()
-        .createGroup(groupName, _currentUser.getCurrentUser.uid, book);
+    String _returnString;
+
+    if (widget.onGroupCreation) {
+      _returnString = await OurDatabase()
+          .createGroup(groupName, _currentUser.getCurrentUser.uid, book);
+    } else {
+      _returnString = await OurDatabase()
+          .addBook(_currentUser.getCurrentUser.groupId, book);
+    }
 
     if (_returnString == "success") {
       Navigator.pushAndRemoveUntil(
@@ -124,7 +130,7 @@ class _OurAddBookState extends State<OurAddBook> {
                         book.author = _authorController.text;
                         book.length = int.parse(_lengthController.text);
                         book.dateCompleted = Timestamp.fromDate(_selectedDate);
-                        _createGroup(context, widget.groupName, book);
+                        _addBook(context, widget.groupName, book);
                       }),
                 ],
               ),

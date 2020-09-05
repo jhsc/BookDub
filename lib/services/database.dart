@@ -119,6 +119,7 @@ class OurDatabase {
           .get();
       retVal.id = bookId;
       retVal.name = _docSnapshot.data()["name"];
+      retVal.author = _docSnapshot.data()["author"];
       retVal.length = _docSnapshot.data()["length"];
       retVal.dateCompleted = _docSnapshot.data()["dateCompleted"];
     } catch (e) {

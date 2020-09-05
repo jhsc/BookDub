@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class OurBook {
   String id;
   String name;
+  String author;
   int length;
   Timestamp dateCompleted;
 
@@ -11,5 +12,6 @@ class OurBook {
     this.name,
     this.length,
     this.dateCompleted,
+    this.author,
   });
 }

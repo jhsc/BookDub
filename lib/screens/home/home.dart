@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:book_dub/screens/add_book/add_book.dart';
+import 'package:book_dub/screens/review/review.dart';
 import 'package:book_dub/screens/root/root.dart';
 import 'package:book_dub/states/currentGroup.dart';
 import 'package:book_dub/states/currentUser.dart';
@@ -72,7 +73,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _goToReview() {}
+  void _goToReview() {
+    CurrentGroup _currentGroup =
+        Provider.of<CurrentGroup>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OurReview(
+          currentGroup: _currentGroup,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

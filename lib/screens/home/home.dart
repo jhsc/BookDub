@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:book_dub/screens/add_book/add_book.dart';
 import 'package:book_dub/screens/root/root.dart';
 import 'package:book_dub/states/currentGroup.dart';
 import 'package:book_dub/states/currentUser.dart';
+import 'package:book_dub/utils/time_left.dart';
 import 'package:book_dub/widgets/our_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +17,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<String> _timeUntil = List(2); // [0] - Time until book is due
+                                     // [1] - Time until next book is revealed
+
+  Timer _timer;
+
+  void _startTimer(CurrentGroup currentGroup) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _timeUntil = OurTimeLeft().timeLeft(currentGroup.getCurrentGroup.currentBookDue.toDate());
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
     CurrentGroup _currentGroup =
         Provider.of<CurrentGroup>(context, listen: false);
     _currentGroup.updateStateFromDatabase(_currentUser.getCurrentUser.groupId);
+    _startTimer(_currentGroup);
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   void _goToAddBook(BuildContext context) {
@@ -91,7 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              dueDate,
+                              // dueDate,
+                              _timeUntil[0] ?? "loading....",
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
@@ -123,18 +147,18 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(
                 vertical: 20.0,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
                   Text(
-                    "Next Book Revealed In:",
+                    "Next Book\nRevealed In:",
                     style: TextStyle(
                       fontSize: 30,
                       color: Colors.grey[600],
                     ),
                   ),
                   Text(
-                    "22 Hours",
+                    _timeUntil[1], ?? "loading...",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,

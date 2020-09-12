@@ -158,4 +158,48 @@ class OurDatabase {
     }
     return retVal;
   }
+
+  Future<String> finishedBook(
+      String groupId, bookId, uid, int rating, String review) async {
+    String retVal = "error";
+
+    try {
+      await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .collection("reviews")
+          .doc(uid)
+          .set({
+        "rating": rating,
+        "review": review,
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
+  Future<bool> isUserDoneWithBook(String groupId, bookId, uid) async {
+    bool retVal = false;
+    try {
+      DocumentSnapshot _docSnapShot = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .collection("reviews")
+          .doc(uid)
+          .get();
+
+      if (_docSnapShot.exists) {
+        retVal = true;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
 }

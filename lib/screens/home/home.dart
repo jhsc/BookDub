@@ -18,14 +18,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> _timeUntil = List(2); // [0] - Time until book is due
-                                     // [1] - Time until next book is revealed
+  // [1] - Time until next book is revealed
 
   Timer _timer;
 
   void _startTimer(CurrentGroup currentGroup) {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        _timeUntil = OurTimeLeft().timeLeft(currentGroup.getCurrentGroup.currentBookDue.toDate());
+        _timeUntil = OurTimeLeft()
+            .timeLeft(currentGroup.getCurrentGroup.currentBookDue.toDate());
       });
     });
   }
@@ -36,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
     CurrentGroup _currentGroup =
         Provider.of<CurrentGroup>(context, listen: false);
-    _currentGroup.updateStateFromDatabase(_currentUser.getCurrentUser.groupId);
+    _currentGroup.updateStateFromDatabase(
+        _currentUser.getCurrentUser.groupId, _currentUser.getCurrentUser.uid);
     _startTimer(_currentGroup);
   }
 
@@ -69,6 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
           (route) => false);
     }
   }
+
+  void _goToReview() {}
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed:
+                          value.getDoneWithCurrentBook ? null : _goToReview,
                     ),
                   ],
                 );
@@ -158,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Text(
-                    _timeUntil[1], ?? "loading...",
+                    _timeUntil[1] ?? "loading...",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
